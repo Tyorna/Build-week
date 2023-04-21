@@ -1,4 +1,4 @@
-var quiz = {
+const quiz = {
   survey: [
     {
       question: 'How can I create a <br><b>checkbox in HTML?<b>',
@@ -107,7 +107,7 @@ var quiz = {
     },
   ],
 
-  // # DICHIARAZIONI VARIABILI BLOBALI DEL QUIZ
+  // # DICHIARAZIONI VARIABILI BLOBALI/PROPRIETA OGGETTO DEL QUIZ
 
   // i wrapper/container dei vari contenuti li dichiariamo "null" cioè vuoti, perchè andremo a dargli i contenuti in seguito
 
@@ -116,6 +116,8 @@ var quiz = {
   wrapAns: null, // wrapper per le risposte del quiz
   now: 0, // indice della domanda corrente
   score: 0, // punteggio dell'utente
+  timeLeft: 30,
+  timer: document.getElementById('timeLeft'),
 
   //p.s. essendo quizContainer, wrapQn, etc proprietà dell'oggetto quiz assegnamo il relativo valore iniziale con ":" al posto di "="
 
@@ -138,6 +140,12 @@ var quiz = {
 
     //eseguiamo la creazione della legenda
     quiz.legenda();
+
+    //chiamata alla funzione che "mescola" le domande
+    quiz.survey = quiz.shuffle(quiz.survey);
+
+    // inizializziamo il timer
+    quiz.runTimer(document.querySelector('.timer'));
 
     //eseguiamo il quiz
     quiz.runQuiz();
@@ -183,93 +191,97 @@ var quiz = {
 
   // # FUNZIONE AGGIORNAMENTO CONTATORE
   counterUpdate: () => {
-    const contatoreParagrafo = document.querySelector("#contatore")
-    contatoreParagrafo.textContent = (quiz.now)+1;
+    const contatoreParagrafo = document.querySelector("#contatore");
+    contatoreParagrafo.textContent = quiz.now + 1;
   },
 
   // # FUNZIONE CREAZIONE LEGENDA CON CONTATORE DOMANDE
   legenda: () => {
-    let legend = document.createElement('p');
+    const legend = document.createElement('p');
+    legend.setAttribute('id', 'legend');
     legend.style.cssText = 'position:absolute;bottom:50px;right:calc(50%-150px);width:300px;height:50px';
-    legend.innerHTML = `QUESTION <span id="contatore">${Number(quiz.now) + 1}</span> <b style="color:#900080;">/ ${quiz.survey.length}</b>`
+    legend.innerHTML = `QUESTION <span id="contatore">${quiz.now + 1}</span> <b style="color:#900080;">/ ${quiz.survey.length}</b>`
     document.body.appendChild(legend);
   },
 
+  // # DOMANDE RANDOM
+  shuffle: (array) => array.sort(() => Math.random() - 0.5),
+
+  // # COUNTDOWN
+  isTimeLeft: () => {
+    return quiz.timeLeft > -1;
+  },
+  
+  // # TIMER
+  runTimer: (timerElement) => {
+    const timerCircle = timerElement.querySelector('svg > circle + circle');
+    timerCircle.style.strokeDashoffset = 1;
+  
+    let countdownTimer = setInterval(function () {
+      if (quiz.isTimeLeft()) {
+        // Calcolare il tempo rimanente e normalizzarlo su una scala da 0 a 1
+        const timeRemaining = quiz.timeLeft--;
+        const normalizedTime = (30 + timeRemaining) / 30;
+        timerCircle.style.strokeDashoffset = normalizedTime; // Impostare il nuovo valore dell'attributo "strokeDashoffset"
+        quiz.timer.innerHTML = timeRemaining;  // Aggiornare il valore del tempo rimanente nella pagina
+      } else {
+        // Se non c'è più tempo disponibile, eseguire la funzione "timeOut" e incrementare la proprietà "quiz.now"
+        quiz.now++;
+        quiz.timeOut();
+      }
+    }, 1000);
+  },
+  
   select: (option) => {
-    // Rimuove l'event listener 'click' da tutte le label delle risposte per evitare che l'utente possa selezionare più di una risposta
+    // Remove the 'click' event listener from all answer label to prevent the user from selecting more than one answer
     let all = quiz.wrapAns.getElementsByTagName('label');
     for (let label of all) {
       label.removeEventListener('click', quiz.select);
     }
-
-    // Verifica se l'indice dell'opzione selezionata è uguale a quella memorizzata nella proprietà answer della domanda relativa
+  
+    // Check if the index of the selected option is equal to that stored in the answer property of the relevant question
     let correct = option.dataset.index == quiz.survey[quiz.now].answer;
-
-    // Aggiornamento del punteggio dell'utente e dell'aspetto dell'opzione di risposta selezionata
+  
+    // Update the user's score and the appearance of the selected answer option
     if (correct) {
       quiz.score++;
       option.classList.add('selected');
-    } else {
-      option.classList.add('selected');
+    } else { 
+      option.classList.add('selected'); 
     }
-    
+  
     quiz.now++;
-    setTimeout(() => {
-      //se l'indice del quiz appena risposto è minore della lunghezza della proprietà "survey:" del quiz, ri-esegui il quiz.
-      if (quiz.now < quiz.survey.length) { 
-        // Aggiorno il contatore e cambio domanda
-        quiz.counterUpdate();
-        quiz.runQuiz(); }
-      else { //altrimenti dai i risultati
-        quiz.wrapQn.innerHTML = `You have answered ${quiz.score} of ${quiz.survey.length} correctly.`;
-        quiz.wrapAns.innerHTML = '';
-      }
-    }, 500);
+    quiz.timeOut();
   },
-
-  //proprietà reset, qual'ora volessimo riprovarlo aggiungendo un bottone
+  
+  // Reset property, in case we want to try the quiz again by adding a button
   reset: () => {
     quiz.now = 0;
     quiz.score = 0;
     quiz.runQuiz();
+  },
+  
+  // Reset the timer to the initial value
+  resetTimer: () => {
+    quiz.timeLeft = 30;
+  },
+  
+  // #TIMEOUT FUNCTION TO RE-INITIALIZE THE QUIZ AFTER THE ANSWER CLICK OR TIMER EXPIRATION
+  timeOut: () => {
+    setTimeout(function () {
+      // if the index of the quiz just answered is less than the length of the "survey:" property of the quiz, run the quiz again.
+      if (quiz.now < quiz.survey.length) {
+        // reset timer and re-initialization of counter, timer, questions.
+        quiz.counterUpdate();
+        quiz.resetTimer();
+        quiz.runQuiz();
+        quiz.runTimer();
+      } else { //otherwise, give the results
+        window.sessionStorage.setItem('score', quiz.score);
+        window.sessionStorage.setItem('totQst', quiz.survey.length)
+        location.href = 'results.html';
+      }
+    }, 500)
+  },
   }
-};
-
-
-window.addEventListener('load', quiz.init);
-
-
-
-
-// questa è la funzione del timer
-let timeLeft = 30;
-let timer = document.getElementById('timeLeft');
-
-function isTimeLeft() {
-  return timeLeft > -1;
-}
-
-function runTimer(timerElement) {
-  const timerCircle = timerElement.querySelector('svg > circle + circle');
-  timerElement.classList.add('animatable');
-  timerCircle.style.strokeDashoffset = 1;
-
-  let countdownTimer = setInterval(function () {
-    if (isTimeLeft()) {
-      const timeRemaining = timeLeft--;
-      const normalizedTime = (30 + timeRemaining) / 30;
-      // for clockwise animation
-      // const normalizedTime = (timeRemaining - 60) / 60;
-      timerCircle.style.strokeDashoffset = normalizedTime;
-      timer.innerHTML = timeRemaining;
-    } else {
-      clearInterval(countdownTimer);
-      timerElement.classList.remove('animatable');
-    }
-  }, 1000);
-}
-
-runTimer(document.querySelector('.timer'));
-
-
-
+  window.addEventListener('load', quiz.init);

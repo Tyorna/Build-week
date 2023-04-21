@@ -1,0 +1,430 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Outfit:wght@400;700&display=swap');
+
+/* STILE GENERALE */
+* {
+  font-family: 'Outfit', sans-serif;
+  box-sizing: border-box;
+}
+
+section p,
+ul,
+li,
+li b,
+label,
+input[type="text"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+}
+
+html {
+  color: #eee;
+  letter-spacing: 1px;
+}
+
+body {
+  letter-spacing: 1px;
+}
+
+/* AREE COLORI */
+.pink {
+  color: #D20094;
+}
+
+.gray {
+  color: #666;
+}
+
+.light-blue {
+  color: #00FFFF;
+}
+
+.dark-blue {
+  color: #0c113b;
+}
+
+.grad-sfondo {
+  height: 100vh;
+  background: linear-gradient(125deg, #0c113b 50%, #341559 55%, #341559 57%, #2c1158 60%, #662672 65%, #581f66 70%, #722a76 75%, #581f66 81%, #0c113b 87%, #0c113b 100%);
+}
+
+/* BOX MODEL OUTLINE */
+.b-0 {
+  border: 0;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mh {
+  margin: 50px 0;
+}
+
+/* FLEXBOX */
+.d-flex {
+  display: flex;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.row-r {
+  flex-direction: row-reverse;
+}
+
+.h-end {
+  justify-content: flex-end;
+}
+
+.v-center {
+  align-items: center;
+}
+
+.h-center {
+  justify-content: center;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.pos-abs {
+  position: absolute;
+}
+/* HEADER */
+h1 {
+  top: 50px;
+  left: 100px;
+}
+
+h1 img {
+  width: 200px;
+}
+
+/* MAIN */
+main {
+  padding: 0 100px;
+  height: 100vh;
+}
+
+h2 {
+  font-size: 85px;
+  line-height: 70px;
+}
+
+h3 {
+  font-size: 60px;
+}
+
+h2, h3 { 
+  font-weight: 400;
+}
+
+h4 {
+  font-size: 30px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+#review p {
+  font-size: 30px;
+  font-family: 'Outfit', sans-serif;
+}
+
+#result p {
+  font-size: 35px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.round p {
+  font-size: 16px !important;
+}
+
+/*BUTTON */
+
+button {
+  background: #00FFFF;
+  padding: 15px 60px;
+  cursor: pointer;
+  box-shadow: #00FFFF 1px 1px 15px;
+  font-size: 25px;
+}
+
+button:hover {
+  box-shadow: #00FFFF 2px 2px 30px;
+}
+
+.btn-ghost{
+  background-color: transparent;
+  color: #eee;
+  border: 2px solid #eee;
+  box-shadow: none;
+}
+
+/* CHECKBOX PERSONALIZZATA */
+input[type="checkbox"] {
+  cursor: pointer;
+  /* per cancellare stile di sistema checkbox */
+  appearance: none;
+  background-color: #0c113b;
+  border: 1.5px solid #fff;
+  width: 17px;
+  height: 17px;
+}
+
+/* Stile del segno di spunta */
+input[type="checkbox"]::before {
+  content: "\2714";
+  display: block;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  visibility: hidden;
+}
+
+/* Stile del segno di spunta quando la checkbox è selezionata */
+input[type="checkbox"]:checked::before {
+  visibility: visible;
+}
+
+/* WIDGET */
+.widgetWrap {
+  width: 900px;
+  padding: 10px 30px 30px 30px;
+  margin: 10px;
+}
+
+/* QUESTION */
+#quizQn {
+  margin-top: 0;
+  font-size: 60px;
+}
+
+/* ANSWERS */
+#quizAns {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 20px 40px;
+}
+
+#quizAns input[type=radio] {
+  display: none;
+}
+
+#quizAns label {
+  font-weight: bold;
+  background:
+    linear-gradient(#23294f 0 0) padding-box,
+    /* background interno */
+    linear-gradient(0deg, #23294f, #fff) border-box;
+  border: 5px solid transparent;
+  border-radius: 100px;
+  padding: 25px 5px;
+  cursor: pointer;
+}
+
+#quizAns label:hover {
+  background:
+    linear-gradient(#23294f 0 0) padding-box,
+    linear-gradient(0deg, transparent, transparent) border-box;
+}
+
+#quizAns label.selected {
+  background:
+    linear-gradient(#900080 0 0) padding-box,
+    linear-gradient(0deg, transparent, transparent) border-box;
+}
+
+/* STAR RATINGS */
+.star {
+  margin-bottom: 80px;
+}
+
+.stella {
+  width: 50px;
+  margin: 5px;
+  filter: brightness(20%);
+}
+
+.active,
+.stella:hover,
+.stella:nth-of-type(0):hover ~ .stella,
+.stella:nth-of-type(1):hover ~ .stella, 
+.stella:nth-of-type(2):hover ~ .stella, 
+.stella:nth-of-type(3):hover ~ .stella, 
+.stella:nth-of-type(4):hover ~ .stella, 
+.stella:nth-of-type(5):hover ~ .stella, 
+.stella:nth-of-type(6):hover ~ .stella, 
+.stella:nth-of-type(7):hover ~ .stella, 
+.stella:nth-of-type(8):hover ~ .stella, 
+.stella:nth-of-type(9):hover ~ .stella, 
+.stella:nth-of-type(10):hover ~ .stella {
+  filter: none;
+  transform: scale(115%);
+  cursor: pointer;
+}
+
+#feedback input[type="text"] {
+  background-color: transparent;
+  text-align: left;
+  border-bottom: #D20094 2px solid;
+  padding: 0 0 10px 30px;
+}
+
+#feedback input:active, input:focus {
+  outline: none;
+  color: #eee;
+}
+
+/* TIMER */
+.timer {
+  top: 40px;
+  right: 90px;
+}
+
+.timer > svg {
+  width: 200px;
+  height: 200px;
+}
+
+.circle1,
+.circle2 {
+  fill: none;
+  stroke: #00FFFF;
+  stroke-width: 18;
+  transform-origin: center center;
+  transform: rotate(-90deg);
+}
+
+.circle1 {
+  opacity: 0.2;
+  stroke: gray;
+}
+
+.circle2 {
+  fill: none;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  stroke: #00FFFF;
+  transition: stroke-dashoffset 1s ease-out;
+  filter: drop-shadow(1px 1px 1px #00FFFF) drop-shadow(-1px -1px 1px #00FFFF);
+}
+
+.secondi {
+  font-size: 55px;
+  fill: white;
+}
+
+.txt-timer  {
+  font-size: 12px;
+  letter-spacing: 0;
+  fill: white;
+}
+
+/* RISULTATI */
+.torta * {
+  font-family: 'Inter', sans-serif;
+}
+
+.torta > svg{
+  width: 500px;
+  height: 600px;
+}
+
+
+#circle3, #circle4  {
+  fill: none;
+  stroke-width: 60;
+  transform-origin: center center;
+}
+
+#circle4 {
+  fill: none;
+  transform: scaleX(-1) rotate(-90deg);
+  stroke: #00FFFF;
+}
+
+#circle3{
+  stroke: #D20094;
+}
+
+.circle5 {
+  fill: none;
+  stroke: black;
+  stroke-opacity: 20%;
+  stroke-width: 70;
+  filter: blur(6px);
+}
+
+.correct {
+  left: 90px;
+  text-align: left;
+}
+
+.wrong {
+  right: 90px;
+  text-align: right;
+}
+
+.correct > p,
+.wrong > p {
+  margin: 0;
+}
+
+.correct b,
+.wrong b {
+  font-size: 58px;
+  line-height: 40px;
+}
+
+.correct p,
+.wrong p {
+  font-size: 22px !important;
+  line-height: 40px;
+}
+
+.round{
+  border-radius: 50%;
+  height: 230px;
+  width: 230px;
+  left: calc(50vw - 115px);
+}
+
+.correct,
+.wrong,
+.round {
+  top: 46vh;
+}
